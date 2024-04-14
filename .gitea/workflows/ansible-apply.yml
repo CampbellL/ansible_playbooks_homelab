@@ -24,6 +24,10 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install SSHPass
+        run:
+          apt install -y sshpass
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
