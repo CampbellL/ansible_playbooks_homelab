@@ -1,6 +1,9 @@
 name: Run Ansible Playbook
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
