@@ -7,16 +7,7 @@ remove_existing_container: false
 persistent_data_path: /opt/portainer:/data
 container_image: portainer/portainer:{{ version }}
 container_name: portainer
-container_labels: {
-    "traefik.enable=true"
-    "traefik.http.routers.portainer.rule=Host(`portainer.home.lan`)"
-    "traefik.http.routers.portainer.entrypoints=websecure"
-    "traefik.http.routers.portainer.tls.certresolver=cloudflare"
-    "traefik.http.routers.portainer.tls=true"
-    "traefik.http.services.portainer.loadbalancer.server.port=3000"
-    "traefik.http.services.portainer.loadbalancer.passhostheader=true"
-    "traefik.docker.network=proxy"
-}
+container_labels: {}
 container_network:
 container_restart_policy: always
 container_recreate: true
