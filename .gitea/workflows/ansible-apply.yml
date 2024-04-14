@@ -28,6 +28,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ansible
+          pip install pywinrm
 
       - name: Install requirements
         run: |
