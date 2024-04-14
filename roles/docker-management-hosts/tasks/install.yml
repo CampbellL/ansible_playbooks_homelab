@@ -3,7 +3,15 @@
   community.docker.docker_container:
     name: "{{ container_name }}"
     image: "{{ container_image }}"
-    labels: "{{ container_labels | default(omit) }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.portainer.rule: "Host(`portainer.home.lan`)"
+      traefik.http.routers.portainer.entrypoints: "websecure"
+      traefik.http.routers.portainer.tls.certresolver: "cloudflare"
+      traefik.http.routers.portainer.tls: "true"
+      traefik.http.services.portainer.loadbalancer.server.port: "3000"
+      traefik.http.services.portainer.loadbalancer.passhostheader: "true"
+      traefik.docker.network: "proxy"
     state: started
     detach: true
     recreate: "{{ container_recreate }}"
