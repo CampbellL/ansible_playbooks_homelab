@@ -29,6 +29,10 @@ jobs:
       - name: Install ansible-lint
         run: pip install ansible-lint
 
+      - name: Install requirements
+        run: |
+          ansible-galaxy collection install -r requirements.yml
+
       - name: Run ansible-lint
         run: ansible-lint
         # Adjust the ansible-lint command line options as necessary for your project
