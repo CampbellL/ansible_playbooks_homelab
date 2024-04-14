@@ -8,8 +8,7 @@ jobs:
     steps:
       - name: Disable Git SSL Verification
         run:
-          "git config --global http.sslVerify false"
-          echo "SSL verification is disabled for all Git operations"
+          git config --global http.sslVerify false
 
       - name: Checkout code
         uses: actions/checkout@v2
