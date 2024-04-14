@@ -1,0 +1,37 @@
+---
+- name: Perform windows bootstrapping
+  hosts: windows
+  roles:
+    - base-windows
+
+- name: Perform linux bootstrapping
+  hosts: rhel
+  become: true
+  roles:
+    - base-linux
+
+- name: Configure the host to trust the CA and setup the step service user
+  hosts: none
+  roles:
+    - role: maxhoesel.smallstep.step_bootstrap_host
+      vars:
+        step_bootstrap_ca_url: https://ca.home.lan:7000
+        step_bootstrap_fingerprint: d65a3a6ff4a652b09139b6252ee7c90c14b7bc9605d415cd8c6e4fbf267556a4
+      become: yes
+
+- name: Install Portainer Agent Nodes
+  hosts: portainer-nodes
+  become: true
+  roles:
+    - portainer-nodes
+
+- name: Install Portainer master to management hosts
+  hosts: docker-management-hosts
+  become: true
+  roles:
+    - docker-management-hosts
+
+- name: Configure DNS on DC's
+  hosts: domain-controllers
+  roles:
+    - domain-controllers

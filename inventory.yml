@@ -1,0 +1,38 @@
+all:
+  children:
+    portainer-nodes:
+      hosts:
+        192.168.100.220:
+        192.168.100.240:
+    docker-management-hosts:
+      hosts:
+        192.168.100.210:
+    domain-controllers:
+      hosts:
+        192.168.100.200:
+    gitea:
+      hosts:
+        192.168.100.240:
+    rhel:
+      children:
+        docker-management-hosts:
+        gitea:
+        portainer-nodes:
+      vars:
+          ansible_connection: ssh
+          ansible_user: '{{ lookup("env", "ANSIBLE_USER") }}'
+          ansible_ssh_pass: '{{ lookup("env", "ANSIBLE_PASSWORD") }}'
+          ansible_become_pass: '{{ lookup("env", "ANSIBLE_PASSWORD") }}'
+          ansible_host_key_checking: false
+          ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    windows:
+      children:
+        domain-controllers:
+      vars:
+        ansible_user: '{{ lookup("env", "ANSIBLE_USER_WIN") }}'
+        ansible_password: '{{ lookup("env", "ANSIBLE_PASSWORD") }}'
+        ansible_connection: winrm
+        ansible_winrm_server_cert_validation: ignore
+        ansible_winrm_transport: basic
+        ansible_port: 5985
+        ansible_winrm_scheme: http

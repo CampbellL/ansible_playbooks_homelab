@@ -1,0 +1,48 @@
+- name: Register RHEL under developer subscription
+  community.general.redhat_subscription:
+    state: present
+    username: louis.campbell
+    password: gqp2edj!cqu1gja8PTV
+    auto_attach: true
+
+- name: Start and enable Coockpit service
+  systemd:
+    name: cockpit.socket
+    state: started
+    enabled: yes
+
+- name: Add Docker repository
+  yum_repository:
+    name: docker-ce
+    description: Docker CE Stable - $releasever
+    baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+    
+- name: Install Docker
+  yum:
+    name:
+      - docker-ce
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    enablerepo: docker-ce
+
+- name: Start and enable Docker service
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+    
+- name: Install pip
+  yum:
+    name:
+      - pip
+    state: present
+
+- name: Install Docker SDK for Python
+  pip:
+    name: "docker<5" 
+  become: yes
