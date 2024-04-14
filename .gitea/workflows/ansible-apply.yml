@@ -5,6 +5,12 @@ on: [ push ]
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
+      ANSIBLE_USER_WIN: ${{ secrets.ANSIBLE_USER_WIN }}
+      ANSIBLE_PASSWORD: ${{ secrets.ANSIBLE_PASSWORD }}
+
     steps:
       - name: Disable Git SSL Verification
         run:
