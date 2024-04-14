@@ -1,0 +1,103 @@
+---
+- name: Install DNS Server role
+  ansible.windows.win_feature:
+    name: DNS
+    state: present
+    include_management_tools: true
+  register: dns_installation
+
+- name: Set reboot pending fact
+  ansible.builtin.set_fact:
+    ansible_reboot_pending: "{{ dns_installation.reboot_required }}"
+
+- name: Reboot server if necessary
+  ansible.windows.win_reboot:
+    msg: Rebooting to complete DNS installation
+    timeout: 600
+  when: ansible_reboot_pending
+
+- name: Create DNS zone home.lan
+  community.windows.win_dns_zone:
+    name: home.lan
+    state: present
+    type: Primary
+    replication: none
+
+- name: Create A record for ca.home.lan
+  community.windows.win_dns_record:
+    name: ca
+    zone: home.lan
+    type: A
+    value: 192.168.100.210
+    state: present
+
+- name: Create A record for gitea.home.lan
+  community.windows.win_dns_record:
+    name: gitea
+    zone: home.lan
+    type: A
+    value: 192.168.100.240
+    state: present
+
+- name: Create A record for authentik.home.lan
+  community.windows.win_dns_record:
+    name: authentik
+    zone: home.lan
+    type: A
+    value: 192.168.100.220
+    state: present
+
+- name: Add A record rhelsrv-containers-general.home.lan
+  community.windows.win_dns_record:
+    name: rhelsrv-containers-general
+    zone: home.lan
+    type: A
+    value: 192.168.100.210
+    state: present
+
+- name: Add A record rhelsrv-authentik.home.lan
+  community.windows.win_dns_record:
+    name: rhelsrv-authentik
+    zone: home.lan
+    type: A
+    value: 192.168.100.220
+    state: present
+
+- name: Add A record rhelsrv-caddy.home.lan
+  community.windows.win_dns_record:
+    name: rhelsrv-caddy
+    zone: home.lan
+    type: A
+    value: 192.168.100.230
+    state: present
+
+- name: Add A record rhelsrv-gitea.home.lan
+  community.windows.win_dns_record:
+    name: rhelsrv-gitea
+    zone: home.lan
+    type: A
+    value: 192.168.100.240
+    state: present
+
+- name: Add A record WINSRV-2022-01.home.lan
+  community.windows.win_dns_record:
+    name: winsrv-2022-01
+    zone: home.lan
+    type: A
+    value: 192.168.100.200
+    state: present
+
+- name: Create DNS zone vsphere.lan
+  community.windows.win_dns_zone:
+    name: vsphere.lan
+    state: present
+    type: Primary
+    replication: none
+
+- name: Add apex record for vsphere.lan
+  community.windows.win_dns_record:
+    name: "@"
+    zone: vsphere.lan
+    type: A
+    value: 192.168.100.105
+    state: present
