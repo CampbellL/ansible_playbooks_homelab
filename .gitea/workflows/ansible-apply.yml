@@ -25,8 +25,9 @@ jobs:
           python-version: '3.x'
 
       - name: Install SSHPass
-        run:
-          apt install -y sshpass
+        run: |
+          apt-get update
+          apt-get install -y sshpass
 
       - name: Install dependencies
         run: |
