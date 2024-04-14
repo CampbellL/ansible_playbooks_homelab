@@ -6,6 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Disable Git SSL Verification
+        run:
+          git config --global http.sslVerify false
+          echo "SSL verification is disabled for all Git operations"
+
       - name: Checkout code
         uses: actions/checkout@v2
 
