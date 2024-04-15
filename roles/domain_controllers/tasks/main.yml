@@ -101,3 +101,18 @@
     type: A
     value: 192.168.100.105
     state: present
+
+- name: Create DNS zone esxi.lan
+  community.windows.win_dns_zone:
+    name: esxi.lan
+    state: present
+    type: Primary
+    replication: none
+
+- name: Add apex record for esxi.lan
+  community.windows.win_dns_record:
+    name: "@"
+    zone: esxi.lan
+    type: A
+    value: 192.168.100.105
+    state: present
