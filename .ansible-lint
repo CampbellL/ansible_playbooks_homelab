@@ -10,9 +10,7 @@ profile: production # min, basic, moderate,safety, shared, production
 # and not relative to the CWD of execution. CLI arguments passed to the --exclude
 # option are parsed relative to the CWD of execution.
 exclude_paths:
-  - .gitea/ # implicit unless exclude_paths is defined in config
-  - roles/docker_management_hosts/defaults/
-  - roles/docker_management_hosts/tasks
+  - .onedev-buildspec.yml
 # parseable: true
 # quiet: true
 # strict: true
