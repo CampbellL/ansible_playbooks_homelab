@@ -26,3 +26,29 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Ansible-Playbook
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Ansible Lint
+    runInContainer: true
+    image: pipelinecomponents/ansible-lint
+    interpreter: !DefaultInterpreter
+      commands: |
+        ansible-galaxy collection install -r requirements.yml
+        ansible-galaxy role install -r requirements.yml
+        ansible-playbook site.yml -i inventory.yml
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !PullRequestUpdateTrigger
+    branches: main
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
