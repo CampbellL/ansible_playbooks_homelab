@@ -19,6 +19,9 @@ jobs:
         ansible-lint
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !PullRequestUpdateTrigger
+    branches: main
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
