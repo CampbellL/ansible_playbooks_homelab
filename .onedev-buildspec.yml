@@ -14,6 +14,7 @@ jobs:
     image: pipelinecomponents/ansible-lint
     interpreter: !DefaultInterpreter
       commands: |
+        ansible-galaxy collection install -r requirements.yml
         ansible-lint
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
