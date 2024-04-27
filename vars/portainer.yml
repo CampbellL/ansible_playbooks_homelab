@@ -1,0 +1,10 @@
+configure_settings: false
+configure_registry: false
+remove_persistent_data: false
+remove_existing_container: false
+
+admin_user: '{{ vault_portainer_user }}'
+admin_password: '{{ vault_portainer_pw }}'
+
+# Endpoints
+endpoints:

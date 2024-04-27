@@ -1,0 +1,51 @@
+- name: Run Portainer Agent container
+  community.general.docker_container:
+    name: portainer_agent
+    image: portainer/agent:2.16.2
+    detach: true
+    state: started
+    restart_policy: always
+    exposed_ports:
+      - 9001
+    published_ports:
+      - "9001:9001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+
+- name: Run postgres container
+  community.general.docker_container:
+    name: postgres
+    image: postgres
+    state: started
+    restart_policy: always
+    exposed_ports:
+      - 5432
+    published_ports: 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env:
+      POSTGRES_PASSWORD: '{{ vault_ondev_postgres_pw }}'
+
+- name: Run OneDev server container
+  community.general.docker_container:
+    name: onedev
+    image: 1dev/server
+    detach: true
+    state: started
+    restart_policy: always
+    exposed_ports:
+      - 6610
+      - 6611
+    published_ports:
+      - "6610:6610"
+      - "6611:6611"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "onedev:/opt/onedev"
+    env:
+      hibernate_dialect: io.onedev.server.persistence.PostgreSQLDialect
+      hibernate_connection_driver_class: org.postgresql.Driver
+      hibernate_connection_url: jdbc:postgresql://192.168.1.35:5432/onedev
+      hibernate_connection_username: postgres
+      hibernate_connection_password: '{{ vault_ondev_postgres_pw }}'

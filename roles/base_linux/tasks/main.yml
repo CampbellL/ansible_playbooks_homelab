@@ -2,15 +2,27 @@
 - name: Register RHEL under developer subscription
   community.general.redhat_subscription:
     state: present
-    username: louis.campbell
-    password: gqp2edj!cqu1gja8PTV
+    username: '{{ vault_rheluser }}'
+    password: '{{ vault_rhelpw }}'
     auto_attach: true
 
-- name: Start and enable Coockpit service
+- name: Start and enable Cockpit service
   ansible.builtin.systemd:
     name: cockpit.socket
     state: started
     enabled: true
+
+- name: Ensure user 'ansible' exists
+  ansible.builtin.user:
+    name: '{{ vault_ansible_user }}'
+    password: "{{ '{{vault_ansible_password}}' | password_hash('sha512') }}"
+    update_password: on_create
+
+- name: Ensure 'ansible' user is in 'wheel' group
+  ansible.builtin.user:
+    name: '{{ vault_ansible_user }}'
+    groups: wheel
+    append: true
 
 - name: Add Docker repository
   ansible.builtin.yum_repository:

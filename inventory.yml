@@ -1,39 +1,35 @@
 ---
 all:
   children:
-    portainer_nodes:
+    onedev:
       hosts:
-        192.168.100.220:
-        192.168.100.240:
-    docker_management_hosts:
+        192.168.1.35:
+    docker_master_host:
       hosts:
-        192.168.100.210:
+        192.168.1.45:
     domain_controllers:
       hosts:
-        192.168.100.200:
-    gitea:
-      hosts:
-        192.168.100.240:
-    rhel:
+        192.168.1.1:
+    linux:
       children:
-        docker_management_hosts:
-        gitea:
-        portainer_nodes:
+        docker_master_host:
+        onedev:
       vars:
-        ansible_connection: ssh
-        ansible_user: '{{ lookup("env", "ANSIBLE_USER") }}'
-        ansible_ssh_pass: '{{ lookup("env", "ANSIBLE_PASSWORD") }}'
-        ansible_become_pass: '{{ lookup("env", "ANSIBLE_PASSWORD") }}'
+        ansible_user: '{{ vault_ansible_user }}'
+        ansible_password: '{{ vault_ansible_password }}'
+        ansible_ssh_pass: '{{ vault_ansible_password }}'
+        ansible_become_pass: '{{ vault_ansible_password }}'
         ansible_host_key_checking: false
         ansible_ssh_common_args: -o StrictHostKeyChecking=no
     windows:
       children:
         domain_controllers:
       vars:
-        ansible_user: '{{ lookup("env", "ANSIBLE_USER_WIN") }}'
-        ansible_password: '{{ lookup("env", "ANSIBLE_PASSWORD") }}'
-        ansible_connection: winrm
-        ansible_winrm_server_cert_validation: ignore
-        ansible_winrm_transport: basic
-        ansible_port: 5985
-        ansible_winrm_scheme: http
+        ansible_user: '{{ vault_ansible_user }}'
+        ansible_password: '{{ vault_ansible_password }}'
+        ansible_ssh_pass: '{{ vault_ansible_password }}'
+        ansible_become_pass: '{{ vault_ansible_password }}'
+        ansible_host_key_checking: false
+        ansible_ssh_common_args: -o StrictHostKeyChecking=no
+        ansible_connection: ssh
+        ansible_shell_type: powershell

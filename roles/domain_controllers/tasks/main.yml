@@ -6,6 +6,13 @@
     include_management_tools: true
   register: dns_installation
 
+- name: Install DNS Server role
+  ansible.windows.win_feature:
+    name: DHCP
+    state: present
+    include_management_tools: true
+  register: dhcp_installation
+
 - name: Set reboot pending fact
   ansible.builtin.set_fact:
     ansible_reboot_pending: "{{ dns_installation.reboot_required }}"
@@ -23,96 +30,105 @@
     type: Primary
     replication: none
 
-- name: Create A record for ca.home.lan
+- name: Create A record for vsphere.home.lan
   community.windows.win_dns_record:
-    name: ca
+    name: vsphere
     zone: home.lan
     type: A
-    value: 192.168.100.210
+    value: 192.168.1.200
     state: present
 
-- name: Create A record for gitea.home.lan
+- name: Create A record for esxi-01.home.lan
   community.windows.win_dns_record:
-    name: gitea
+    name: esxi-01
     zone: home.lan
     type: A
-    value: 192.168.100.240
+    value: 192.168.1.100
     state: present
 
-- name: Create A record for authentik.home.lan
+- name: Create A record for esxi-02.home.lan
   community.windows.win_dns_record:
-    name: authentik
+    name: esxi-02
     zone: home.lan
     type: A
-    value: 192.168.100.220
+    value: 192.168.1.110
     state: present
 
-- name: Add A record rhelsrv-containers-general.home.lan
+- name: Create A record for truenas.home.lan
   community.windows.win_dns_record:
-    name: rhelsrv-containers-general
+    name: truenas
     zone: home.lan
     type: A
-    value: 192.168.100.210
+    value: 192.168.1.25
     state: present
 
-- name: Add A record rhelsrv-authentik.home.lan
+- name: Create A record for adguard.home.lan
   community.windows.win_dns_record:
-    name: rhelsrv-authentik
+    name: adguard
     zone: home.lan
     type: A
-    value: 192.168.100.220
+    value: 192.168.1.45
     state: present
 
-- name: Add A record rhelsrv-caddy.home.lan
-  community.windows.win_dns_record:
-    name: rhelsrv-caddy
-    zone: home.lan
-    type: A
-    value: 192.168.100.230
-    state: present
-
-- name: Add A record rhelsrv-gitea.home.lan
-  community.windows.win_dns_record:
-    name: rhelsrv-gitea
-    zone: home.lan
-    type: A
-    value: 192.168.100.240
-    state: present
-
-- name: Add A record WINSRV-2022-01.home.lan
-  community.windows.win_dns_record:
-    name: winsrv-2022-01
-    zone: home.lan
-    type: A
-    value: 192.168.100.200
-    state: present
-
-- name: Create DNS zone vsphere.lan
+- name: Create DNS zone campbell.lu
   community.windows.win_dns_zone:
-    name: vsphere.lan
+    name: campbell.lu
     state: present
     type: Primary
     replication: none
 
-- name: Add apex record for vsphere.lan
+- name: Create A record for vsphere.campbell.lu
   community.windows.win_dns_record:
-    name: "@"
-    zone: vsphere.lan
+    name: vsphere
+    zone: campbell.lu
     type: A
-    value: 192.168.100.105
+    value: 192.168.1.200
     state: present
 
-- name: Create DNS zone esxi.lan
-  community.windows.win_dns_zone:
-    name: esxi.lan
-    state: present
-    type: Primary
-    replication: none
-
-- name: Add apex record for esxi.lan
+- name: Create A record for esxi-01.campbell.lu
   community.windows.win_dns_record:
-    name: "@"
-    zone: esxi.lan
+    name: esxi-01
+    zone: campbell.lu
     type: A
-    value: 192.168.100.100
+    value: 192.168.1.100
+    state: present
+
+- name: Create A record for esxi-02.campbell.lu
+  community.windows.win_dns_record:
+    name: esxi-02
+    zone: campbell.lu
+    type: A
+    value: 192.168.1.110
+    state: present
+
+- name: Create A record for truenas.campbell.lu
+  community.windows.win_dns_record:
+    name: truenas
+    zone: campbell.lu
+    type: A
+    value: 192.168.1.45
+    state: present
+
+- name: Create A record for portainer.campbell.lu
+  community.windows.win_dns_record:
+    name: portainer
+    zone: campbell.lu
+    type: A
+    value: 192.168.1.45
+    state: present
+
+- name: Create A record for onedev.campbell.lu
+  community.windows.win_dns_record:
+    name: onedev
+    zone: campbell.lu
+    type: A
+    value: 192.168.1.45
+    state: present
+
+- name: Create A record for adguard.campbell.lu
+  community.windows.win_dns_record:
+    name: adguard
+    zone: campbell.lu
+    type: A
+    value: 192.168.1.45
     state: present

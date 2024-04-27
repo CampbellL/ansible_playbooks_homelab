@@ -10,3 +10,5 @@ collections:
     version: 2.2.0
   - name: community.docker
     version: 3.8.1
+roles:
+  - name: shelleg.ansible_role_portainer
