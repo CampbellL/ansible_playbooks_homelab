@@ -54,3 +54,19 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Push Mirror to Github
+  steps:
+  - !PushRepository
+    name: Push to Github
+    remoteUrl: https://github.com/CampbellL/ansible_playbooks_homelab.git
+    userName: lcampbell
+    passwordSecret: GITHUB_PUSH_MIRROR_TOKEN
+    force: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger
+    branches: main
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
