@@ -16,17 +16,35 @@
     name: openssl
     state: present
 
+- name: Check if .env file exists
+  ansible.builtin.stat:
+    path: "/opt/authentik/.env"
+  register: env_file
+
+- name: Generate PG_PASS
+  ansible.builtin.command:
+    cmd: "openssl rand -base64 36"
+  register: pg_pass
+  changed_when: not env_file.stat.exists
+
+- name: Generate AUTHENTIK_SECRET_KEY
+  ansible.builtin.command:
+    cmd: "openssl rand -base64 60"
+  register: authentik_secret_key
+  changed_when: not env_file.stat.exists
+
 - name: Create .env file for Authentik configuration
   ansible.builtin.copy:
     dest: "/opt/authentik/.env"
     mode: '0755'
     content: |
-      PG_PASS={{ lookup('pipe', 'openssl rand -base64 36') }}
-      AUTHENTIK_SECRET_KEY={{ lookup('pipe', 'openssl rand -base64 60') }}
+      PG_PASS={{ pg_pass.stdout }}
+      AUTHENTIK_SECRET_KEY={{ authentik_secret_key.stdout }}
       AUTHENTIK_ERROR_REPORTING__ENABLED=true
       COMPOSE_PORT_HTTP=80
       COMPOSE_PORT_HTTPS=443
     force: false
+    when: not env_file.stat.exists
 
 - name: Pull the latest Docker images
   community.docker.docker_compose:
