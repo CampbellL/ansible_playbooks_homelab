@@ -46,11 +46,6 @@
     force: false
   when: not env_file.stat.exists
 
-- name: Pull the latest Docker images
-  community.docker.docker_compose:
-    project_src: "/opt/authentik"
-    command: pull
-
 - name: Deploy Authentik using Docker Compose
   community.docker.docker_compose:
     project_src: "/opt/authentik"
