@@ -25,13 +25,13 @@
   ansible.builtin.command:
     cmd: "openssl rand -base64 36"
   register: pg_pass
-  when: not env_file.stat.exists
+  changed_when: not env_file.stat.exists
 
 - name: Generate AUTHENTIK_SECRET_KEY
   ansible.builtin.command:
     cmd: "openssl rand -base64 60"
   register: authentik_secret_key
-  when: not env_file.stat.exists
+  changed_when: not env_file.stat.exists
 
 - name: Create .env file for Authentik configuration
   ansible.builtin.copy:
