@@ -23,6 +23,15 @@
     - misc_containers
 
 - name: Setup OneDev
+  hosts: authentik
+  become: true
+  vars:
+    pip_install_packages:
+      - name: docker
+  roles:
+    - authentik_host
+
+- name: Setup OneDev
   hosts: onedev
   become: true
   vars:
