@@ -22,13 +22,13 @@
   register: env_file
 
 - name: Generate PG_PASS
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: "openssl rand -base64 36"
   register: pg_pass
   when: not env_file.stat.exists
 
 - name: Generate AUTHENTIK_SECRET_KEY
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: "openssl rand -base64 60"
   register: authentik_secret_key
   when: not env_file.stat.exists
