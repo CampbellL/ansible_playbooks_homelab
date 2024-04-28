@@ -11,6 +11,11 @@
     dest: "/opt/authentik/docker-compose.yml"
     mode: '0755'
 
+- name: Download the Docker Compose file
+  ansible.builtin.yum:
+    name: openssl
+    state: present
+
 - name: Create .env file for Authentik configuration
   ansible.builtin.copy:
     dest: "/opt/authentik/.env"
