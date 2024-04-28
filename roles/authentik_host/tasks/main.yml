@@ -1,0 +1,39 @@
+---
+- name: Create directory for Authentik
+  ansible.builtin.file:
+    path: "/opt/authentik"
+    state: directory
+    mode: '0755'
+
+- name: Download the Docker Compose file
+  ansible.builtin.get_url:
+    url: https://goauthentik.io/docker-compose.yml
+    dest: "/opt/authentik/docker-compose.yml"
+    mode: '0755'
+
+- name: Create .env file for Authentik configuration
+  ansible.builtin.copy:
+    dest: "/opt/authentik/.env"
+    mode: '0755'
+    content: |
+      PG_PASS={{ lookup('pipe', 'openssl rand -base64 36') }}
+      AUTHENTIK_SECRET_KEY={{ lookup('pipe', 'openssl rand -base64 60') }}
+      AUTHENTIK_ERROR_REPORTING__ENABLED=true
+      COMPOSE_PORT_HTTP=80
+      COMPOSE_PORT_HTTPS=443
+    force: false
+
+- name: Pull the latest Docker images
+  community.docker.docker_compose:
+    project_src: "/opt/authentik"
+    command: pull
+
+- name: Deploy Authentik using Docker Compose
+  community.docker.docker_compose:
+    project_src: "/opt/authentik"
+    state: present
+
+- name: Ensure Authentik is started
+  community.docker.docker_compose:
+    project_src: "/opt/authentik"
+    state: started

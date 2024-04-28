@@ -1,6 +1,9 @@
 ---
 all:
   children:
+    authentik:
+      hosts:
+        192.168.1.55:
     onedev:
       hosts:
         192.168.1.35:
@@ -14,6 +17,7 @@ all:
       children:
         docker_master_host:
         onedev:
+        authentik:
       vars:
         ansible_user: '{{ vault_ansible_user }}'
         ansible_password: '{{ vault_ansible_password }}'
