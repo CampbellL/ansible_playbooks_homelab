@@ -44,7 +44,7 @@
       COMPOSE_PORT_HTTP=80
       COMPOSE_PORT_HTTPS=443
     force: false
-    when: not env_file.stat.exists
+  when: not env_file.stat.exists
 
 - name: Pull the latest Docker images
   community.docker.docker_compose:
