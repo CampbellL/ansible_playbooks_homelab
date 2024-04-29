@@ -59,3 +59,8 @@
   ansible.builtin.pip:
     name: docker<5
   become: true
+
+- name: Install Docker SDK for Python
+  ansible.builtin.pip:
+    name: docker-compose
+  become: true
