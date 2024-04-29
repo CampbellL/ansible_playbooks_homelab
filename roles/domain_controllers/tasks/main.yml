@@ -119,7 +119,7 @@
 
 - name: Create A record for authentik.campbell.lu
   community.windows.win_dns_record:
-    name: portainer
+    name: authentik
     zone: campbell.lu
     type: A
     value: 192.168.1.45

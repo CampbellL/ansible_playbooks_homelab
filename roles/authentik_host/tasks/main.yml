@@ -50,8 +50,3 @@
   community.docker.docker_compose:
     project_src: "/opt/authentik"
     state: present
-
-- name: Ensure Authentik is started
-  community.docker.docker_compose:
-    project_src: "/opt/authentik"
-    state: started
