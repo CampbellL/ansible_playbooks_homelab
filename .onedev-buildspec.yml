@@ -14,8 +14,8 @@ jobs:
     image: pipelinecomponents/ansible-lint
     interpreter: !DefaultInterpreter
       commands: |
-        ansible-galaxy collection install -r requirements.yml
-        ansible-galaxy role install -r requirements.yml
+        ansible-galaxy collection install -r collections/requirements.yml
+        ansible-galaxy role install -r roles/requirements.yml
         ansible-lint
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
@@ -35,16 +35,16 @@ jobs:
     withSubmodules: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
-    name: Ansible Playbook site.yml
+    name: Ansible Playbook configure.yml
     runInContainer: true
     image: pipelinecomponents/ansible-lint
     interpreter: !DefaultInterpreter
       commands: |
         apk add --no-cache sshpass openssh
-        ansible-galaxy collection install -r requirements.yml
-        ansible-galaxy role install -r requirements.yml
+        ansible-galaxy collection install -r collections/requirements.yml
+        ansible-galaxy role install -r roles/requirements.yml
         echo "@secret:ANSIBLE_VAULT_PW@" > .vault_password.txt
-        ansible-playbook site.yml -i inventory.yml --vault-password-file .vault_password.txt
+        ansible-playbook playbooks/configure.yml -i inventory.yml --vault-password-file .vault_password.txt
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
