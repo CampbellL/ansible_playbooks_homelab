@@ -1,0 +1,8 @@
+- name: Perform linux bootstrapping
+  hosts: linux
+  become: true
+  tasks:
+    - name: Update all packages
+      yum:
+        name: '*'
+        state: latest

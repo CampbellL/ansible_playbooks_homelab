@@ -17,7 +17,7 @@
     pip_install_packages:
       - name: docker
   vars_files:
-    - vars/portainer.yml
+    - ../vars/portainer.yml
   roles:
     - shelleg.ansible_role_portainer
     - misc_containers
