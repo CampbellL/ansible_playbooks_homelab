@@ -45,3 +45,15 @@
       - "npm_manager_data:/data"
       - "npm_manager_letsencrypt:/etc/letsencrypt"
     state: started
+
+- name: Run Uptime Kuma Docker container
+  become: yes
+  docker_container:
+    name: uptime-kuma
+    image: louislam/uptime-kuma:1
+    restart_policy: always
+    ports:
+      - "3001:3001"
+    volumes:
+      - "uptime-kuma:/app/data"
+    state: started
