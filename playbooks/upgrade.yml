@@ -13,7 +13,7 @@
   become: true
   tasks:
     - name: Install Windows updates
-      ansible.win.win_updates:
+      ansible.windows.win_updates:
         category_names:
           - SecurityUpdates
           - UpdateRollups
