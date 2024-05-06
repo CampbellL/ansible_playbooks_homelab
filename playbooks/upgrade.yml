@@ -10,7 +10,6 @@
 
 - name: Update Windows Server systems
   hosts: windows
-  become: true
   tasks:
     - name: Install Windows updates
       ansible.windows.win_updates:
