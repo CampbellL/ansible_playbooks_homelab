@@ -148,3 +148,19 @@
     type: A
     value: 192.168.1.45
     state: present
+
+- name: Create A record for semaphore.campbell.lu
+  community.windows.win_dns_record:
+    name: semaphore
+    zone: campbell.lu
+    type: A
+    value: 192.168.1.45
+    state: present
+
+- name: Create A record for netbird.campbell.lu
+  community.windows.win_dns_record:
+    name: netbird
+    zone: campbell.lu
+    type: A
+    value: 176.58.113.59
+    state: present
