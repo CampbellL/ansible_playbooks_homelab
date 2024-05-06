@@ -1,4 +1,4 @@
-- name: Perform linux bootstrapping
+- name: Update RHEL Server systems
   hosts: linux
   become: true
   tasks:
@@ -7,3 +7,15 @@
         name: '*'
         state: latest
         update_cache: true
+
+- name: Update Windows Server systems
+  hosts: windows
+  become: true
+  tasks:
+    - name: Install Windows updates
+      ansible.win.win_updates:
+        category_names:
+          - SecurityUpdates
+          - UpdateRollups
+          - CriticalUpdates
+        state: installed
