@@ -164,3 +164,11 @@
     type: A
     value: 176.58.113.59
     state: present
+
+- name: Create A record for vinyl.campbell.lu
+  community.windows.win_dns_record:
+    name: vinyl
+    zone: campbell.lu
+    type: A
+    value: 192.168.0.5
+    state: present
